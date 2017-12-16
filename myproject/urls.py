@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from geupsikbot.views import keyboard
+from geupsikbot.views import keyboard, answer
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^keyboard/', keyboard, name='keyboard'),
+    url(r'^message/', answer, name='answer'),
 ]
