@@ -17,3 +17,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Menu(models.Model):
+    id = models.AutoField(primary_key=True)
+    lunch = models.CharField(max_length=150, default="")
+    dinner = models.CharField(max_length=150, default="")
+
