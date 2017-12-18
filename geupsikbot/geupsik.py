@@ -11,7 +11,7 @@ def schulMillParsing(year, month):
     page+="schulKndScCode=04&"
     page+="schYm="+str(year)+str(month) +"&"
     #print(page)
-    html=urlopen(page+'?connection_timeout=300')
+    html=urlopen(page)
     source=html.read()
     html.close()
 
