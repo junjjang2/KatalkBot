@@ -25,7 +25,7 @@ def answer(request):
 
     return JsonResponse({
         'message': {
-            'text': today_date + '의' + geupsik_time+ '메뉴입니다.' + get_menu(geupsik_time)
+            'text': today_date + '의' + geupsik_time+ '메뉴입니다.' #+ get_menu(geupsik_time)
         },
         'keyboard': {
             'type': 'buttons',
