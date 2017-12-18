@@ -73,8 +73,21 @@ def menuParsing(year, month, day):
                 sdinner = ''
 
             f=open("menuPaper.txt", 'w')
-            f.write(slunch+'\n')
-            f.write(sdinner)
-            #return [slunch, sdinner]
+            f.write("%d-%d-%d" %(year, month, day) +"!"+slunch+"!"+sdinner )
+            f.close()
+            arr=[]
+            arr.append(slunch)
+            arr.append(sdinner)
+            return arr
 
-menuParsing(2017,12,18)
+f=open("menuPaper.txt", 'w')
+for i in range(1, 32):
+    #l=menuParsing(2017,12,i)
+
+    l=menuParsing(2017,12,i)
+    sd = l[1]
+    sl = l[0]
+    date=datetime(2017, 12 ,i)
+    f.write(str(date.date()) + "!" + sl + "!" + sd + "\n")
+
+f.close()

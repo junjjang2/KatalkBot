@@ -1,12 +1,13 @@
-import datetime
+from _datetime import datetime
 import json
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
-from geupsikbot import geupsik
 from geupsikbot.models import Menu
 
+tday=datetime.now().date()
 
 def keyboard(request):
 
@@ -21,11 +22,11 @@ def answer(request):
     json_str = ((request.body).decode('utf-8)'))
     received_json_data = json.loads(json_str)
     geupsik_time = received_json_data['content']
-    today_date =datetime.date.today().strftime("%m월 %d일")
+    today_date =str(tday.month)+ "." + str(tday.day)
 
     return JsonResponse({
         'message': {
-            'text': today_date + '의' + geupsik_time+ '메뉴입니다.' #+ get_menu(geupsik_time)
+            'text': today_date + '의' + geupsik_time+ '메뉴입니다.' + get_menu(tday)
         },
         'keyboard': {
             'type': 'buttons',
@@ -40,32 +41,31 @@ def crawl(request):
     menu_db.delete()
 
     #menus = geupsik.menuParsing(datetime.date.year, datetime.date.month, datetime.date.day)
-    f=open('menuPaper.txt','r')
-    menus=[]
-    menus.append(f.read())
-    menus.append(f.read())
-    create_menu_db(menus[0], menus[1])
+    get_menu(tday)
+    f= open("menuPaper.txt", 'r')
+    lines = f.readlines()
+    sl=""
+    sd=""
+    for l in lines:
+        l=l.split("!")
+        if l[0] is datetime.date():
+            sl=l[1]
+            sd=l[2]
+
+    create_menu_db(tday, sl, sd)
     return 0
 
 
-def create_menu_db(slunch, sdinner):
+def create_menu_db(today, slunch, sdinner):
     Menu.objects.create(
+        date=today,
         lunch=slunch,
         dinner=sdinner
     )
+def get_menu(today):
+    sl=Menu.objects.get(date=today).lunch
+    sd=Menu.objects.get(date=today).dinner
 
-def get_menu(time):
-    f = open('menuPaper.txt', 'r')
-    menus = []
-    menus.append(f.read())
-    menus.append(f.read())
-    #if time is '중식':
-    #    menus=Menu.object.lunch.split()
-    #
-    #elif time is '석식':
-    #    menus = Menu.object.dinner.split()
-
-    str='-------------\n'
-    for i in menus:
-        str+=i+"\n"
-    return str
+    return "---------------\n" + "중식\n"+ sl \
+           + "---------------\n" + "석식\n" + sd \
+           + "---------------"

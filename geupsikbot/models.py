@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from datetime import datetime
 
 class Post(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE)
@@ -21,6 +21,7 @@ class Post(models.Model):
 
 class Menu(models.Model):
     id = models.AutoField(primary_key=True)
+    date=models.DateTimeField(default=datetime.now().date())
     lunch = models.CharField(max_length=150, default="")
     dinner = models.CharField(max_length=150, default="")
 
